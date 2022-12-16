@@ -1,6 +1,14 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PaginaPrincipal from "./PaginaPrincipal";
 
 function App() {
-  return ( <p>Oi!</p>);
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<PaginaPrincipal />} />
+      </Routes>
+    </BrowserRouter>
+    );
 }
 
 export default App;
