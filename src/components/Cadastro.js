@@ -1,22 +1,44 @@
-import styled from "styled-components"
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios';
+import styled from "styled-components"
 import logo from "../assets/logo.svg"
 
 export default function PaginaPrincipal() {
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [image, setImage] = useState("");
+    const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    function home(){
-        navigate("/cadastro")
+    function dadosConta(event){
+        event.preventDefault();
+        axios
+            .post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up`, {
+                email: email,
+                name: name,
+                image: image,
+                password: password
+            } )
+            .then(pagina)
+            .catch((erro) => console.log(erro))
+    }
+
+    function pagina(){
+        
+        navigate("/")
     }
 
     return (
         <HomeStyled>
             <img src={logo}/>
-            <input data-test="email-input" placeholder="email"></input>
-            <input data-test="password-input" placeholder="senha"></input>
-            <input data-test="user-name-input" placeholder="nome"></input>
-            <input data-test="user-image-input" placeholder="foto"></input>
-            <button data-test="signup-btn">Cadastrar</button>
+            <form onSubmit={dadosConta}>    
+                <input type="text" data-test="email-input" value={email} onChange={e => setEmail(e.target.value)} placeholder="email" required></input>
+                <input type="text" data-test="password-input" value={password} onChange={e => setPassword(e.target.value)} placeholder="senha" required></input>
+                <input type="text" data-test="user-name-input" value={name} onChange={e => setName(e.target.value)} placeholder="nome" required></input>
+                <input type="text" data-test="user-image-input" value={image} onChange={e => setImage(e.target.value)} placeholder="foto" required></input>
+                <button type="submit" data-test="signup-btn">Cadastrar</button>
+            </form>
             <Link data-test="login-link" to={"/"}><p>Já tem uma conta? Faça login!</p></Link>
         </HomeStyled>
     )

@@ -1,20 +1,37 @@
-import styled from "styled-components"
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios';
+import styled from "styled-components"
 import logo from "../assets/logo.svg"
 
 export default function PaginaPrincipal() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    function home(){
-        navigate("/cadastro")
+    function habitos(){
+        navigate("/habitos")
+    }
+
+    function loginConta(event){
+        event.preventDefault();
+        axios
+            .post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login`, {
+                email: email,
+                password: password
+            } )
+            .then(habitos)
+            .catch((erro) => console.log(erro))
     }
 
     return (
         <HomeStyled>
             <img src={logo}/>
-            <input data-test="email-input" placeholder="email"></input>
-            <input data-test="password-input" placeholder="senha"></input>
-            <button data-test="login-btn">Entrar</button>
+            <form onSubmit={loginConta}>    
+                <input type="text" data-test="email-input" value={email} onChange={e => setEmail(e.target.value)} placeholder="email" required></input>
+                <input type="text" data-test="password-input" value={password} onChange={e => setPassword(e.target.value)} placeholder="senha" required></input>
+                <button type="submit" data-test="login-btn">Entrar</button>
+            </form>
             <Link data-test="signup-link" to={"/cadastro"}><p>Não tem uma conta? Cadastre-se!</p></Link>
         </HomeStyled>
     )
